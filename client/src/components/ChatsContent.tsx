@@ -1,178 +1,49 @@
 const ChatsContent = () => {
   return (
-    <ul className='h-[80vh] bg-primary p-5 overflow-y-scroll flex flex-col'>
+    <ul className='flex-1 bg-background p-5 overflow-y-scroll flex flex-col'>
       {/* me */}
-      <li className='max-w-[50vw] w-max rounded-lg my-1 self-end'>
-        <div className='flex items-end gap-1'>
-          <div>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-4 h-4 text-purple'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M4.5 12.75l6 6 9-13.5'
-              />
-            </svg>
-          </div>
-          <div className='bg-purple p-2 rounded-lg'>Heyy, can you hear me?</div>
+      <li className='chat chat-end'>
+        <div className='chat-header'>
+          <time className='text-xs opacity-50'>2:01 am</time>
         </div>
-        <div className='text-gray-500 mt-1 text-xs text-right'>2:01 am</div>
+        <div className='chat-bubble bg-primary'>I loved you.</div>
+        <div className='chat-footer opacity-50'>Seen</div>
+      </li>
+      {/* me */}
+      <li className='chat chat-end'>
+        <div className='chat-header'>
+          <time className='text-xs opacity-50'>2:01 am</time>
+        </div>
+        <div className='chat-bubble bg-primary'>I loved you.</div>
+        <div className='chat-footer opacity-50'>Seen</div>
       </li>
 
       {/* guest */}
-      <li className='max-w-[50vw] w-max my-1'>
-        <div className='bg-[#1B1B1B] rounded-lg p-2'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis,
-          facere. Odio iure ullam exercitationem similique nobis. Perferendis
-          expedita, ducimus illo tempore, quae assumenda quibusdam iste,
-          blanditiis sit totam aspernatur delectus.
+      <li className='chat chat-start'>
+        <div className='chat-header'>
+          <time className='text-xs opacity-50'>2:00 am</time>
         </div>
-        <div className='text-gray-500 mt-1 text-xs'>2:01 am</div>
-      </li>
-
-      {/* guest */}
-      <li className='max-w-[50vw] w-max my-1'>
-        <div className='bg-[#1B1B1B] rounded-lg p-2'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis,
-          facere. Odio iure ullam exercitationem similique nobis. Perferendis
-          expedita, ducimus illo tempore, quae assumenda quibusdam iste,
-          blanditiis sit totam aspernatur delectus.
+        <div className='chat-bubble bg-[#1b1b1b]'>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis,
+          odit! Quas maxime, sit laboriosam exercitationem fugiat fugit. Ducimus
+          sed dolorem rerum temporibus facere modi, ratione earum, cum nostrum,
+          magnam voluptates!
         </div>
-        <div className='text-gray-500 mt-1 text-xs'>2:01 am</div>
+        {/* <div className='chat-footer opacity-50'>Seen</div> */}
       </li>
 
       {/* me */}
-      <li className='max-w-[50vw] w-max rounded-lg my-1 self-end'>
-        <div className='flex items-end gap-1'>
-          <div>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-4 h-4 text-purple'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M4.5 12.75l6 6 9-13.5'
-              />
-            </svg>
-          </div>
-          <div className='bg-purple p-2 rounded-lg'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat
-            corporis exercitationem repellat. Debitis pariatur fugiat optio
-            error laborum aliquam natus odit dolore sint, tenetur rerum iusto
-            cupiditate, non nemo? Eos!
-          </div>
+      <li className='chat chat-end'>
+        <div className='chat-header'>
+          <time className='text-xs opacity-50'>2:01 am</time>
         </div>
-        <div className='text-gray-500 mt-1 text-xs text-right'>2:01 am</div>
-      </li>
-
-      {/* me */}
-      <li className='max-w-[50vw] w-max rounded-lg my-1 self-end'>
-        <div className='flex items-end gap-1'>
-          <div>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-4 h-4 text-purple'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M4.5 12.75l6 6 9-13.5'
-              />
-            </svg>
-          </div>
-          <div className='bg-purple p-2 rounded-lg'>hellooo</div>
+        <div className='chat-bubble bg-primary'>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
+          consectetur distinctio sequi modi minima magnam alias in praesentium
+          cum ipsa iste corrupti, velit officiis necessitatibus doloremque nemo.
+          Expedita, animi ex.
         </div>
-        <div className='text-gray-500 mt-1 text-xs text-right'>2:01 am</div>
-      </li>
-
-      {/* guest */}
-      <li className='max-w-[50vw] w-max my-1'>
-        <div className='bg-[#1B1B1B] rounded-lg p-2'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis,
-          facere. Odio iure ullam exercitationem similique nobis. Perferendis
-          expedita, ducimus illo tempore, quae assumenda quibusdam iste,
-          blanditiis sit totam aspernatur delectus.
-        </div>
-        <div className='text-gray-500 mt-1 text-xs'>2:01 am</div>
-      </li>
-
-      {/* guest */}
-      <li className='max-w-[50vw] w-max my-1'>
-        <div className='bg-[#1B1B1B] rounded-lg p-2'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis,
-          facere. Odio iure ullam exercitationem similique nobis. Perferendis
-          expedita, ducimus illo tempore, quae assumenda quibusdam iste,
-          blanditiis sit totam aspernatur delectus.
-        </div>
-        <div className='text-gray-500 mt-1 text-xs'>2:01 am</div>
-      </li>
-
-      {/* me */}
-      <li className='max-w-[50vw] w-max rounded-lg my-1 self-end'>
-        <div className='flex items-end gap-1'>
-          <div>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-4 h-4 text-purple'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M4.5 12.75l6 6 9-13.5'
-              />
-            </svg>
-          </div>
-          <div className='bg-purple p-2 rounded-lg'>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem dolorum
-            qui pariatur ea velit repudiandae voluptates consequuntur rerum
-            porro eligendi magni nam enim perspiciatis totam, modi laboriosam,
-            explicabo quasi vitae.
-          </div>
-        </div>
-        <div className='text-gray-500 mt-1 text-xs text-right'>2:01 am</div>
-      </li>
-
-      {/* me */}
-      <li className='max-w-[50vw] w-max rounded-lg my-1 self-end'>
-        <div className='flex items-end gap-1'>
-          <div>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={1.5}
-              stroke='currentColor'
-              className='w-4 h-4 text-purple'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M4.5 12.75l6 6 9-13.5'
-              />
-            </svg>
-          </div>
-          <div className='bg-purple p-2 rounded-lg'>akhras</div>
-        </div>
-        <div className='text-gray-500 mt-1 text-xs text-right'>2:01 am</div>
+        <div className='chat-footer opacity-50'>Delivered</div>
       </li>
     </ul>
   );

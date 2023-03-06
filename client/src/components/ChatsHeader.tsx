@@ -4,7 +4,7 @@ type Props = {
 
 const ChatHeader: React.FC<Props> = ({ openProfile }) => {
   return (
-    <div className='flex p-5 gap-5 h-[10vh]'>
+    <div className='flex items-center p-5 gap-5'>
       <img
         className='w-10 h-10 rounded-full'
         src='https://preview.redd.it/dh5otp8kcf741.png?width=640&crop=smart&auto=webp&s=d795f12b5e3eea1ef4d7ceb8244fca98e2384dbf'

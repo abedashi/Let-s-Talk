@@ -5,7 +5,7 @@ import SideBar from './components/ui/SideBar';
 
 const App = () => {
   return (
-    <div className='flex'>
+    <div className='flex bg-[#1b1b1b]'>
       <SideBar />
       <Inbox />
       <Chats />

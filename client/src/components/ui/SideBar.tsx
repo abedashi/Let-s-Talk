@@ -1,6 +1,6 @@
 const SideBar = () => {
   return (
-    <div className='w-20 bg-primary h-screen pt-5 pb-5 flex flex-col justify-between'>
+    <div className='w-20 bg-background h-screen pt-5 pb-5 flex flex-col justify-between'>
       {/* <div className='text-center'>logo</div> */}
       <img
         src='https://images.squarespace-cdn.com/content/v1/5b97ee75b27e391dae45e96e/1538126215679-ES6NOSJZSQ6WYBOKA2GJ/LetsTalk_Landscape_Black.png'

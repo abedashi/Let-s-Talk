@@ -1,10 +1,10 @@
 const ChatsInput = () => {
   return (
-    <form className='flex items-center h-[10vh] p-5'>
+    <form className='flex items-center p-5'>
       <label htmlFor='chat' className='sr-only'>
         Your message
       </label>
-      <div className='flex items-center px-3 py-2 rounded-lg bg-primary w-full dark:bg-gray-700'>
+      <div className='flex items-center px-3 py-2 rounded-lg w-full'>
         <button
           type='button'
           className='inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600'
@@ -45,17 +45,17 @@ const ChatsInput = () => {
         </button>
         <input
           type='text'
-          className='bg-primary border border-primary text-white text-sm rounded-lg focus:ring-purple focus:border-purple block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
+          className='bg-background border border-background text-white text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5'
           placeholder='Type message...'
           required
         />
         <button
           type='submit'
-          className='inline-flex justify-center p-2 rounded-full cursor-pointer hover:bg-blue-100 dark:text-blue-500 dark:hover:bg-gray-600'
+          className='inline-flex justify-center p-2 rounded-full cursor-pointer hover:bg-blue-100 dark:hover:bg-gray-600'
         >
           <svg
             aria-hidden='true'
-            className='w-6 h-6 rotate-90 text-purple'
+            className='w-6 h-6 rotate-90 text-primary'
             fill='currentColor'
             viewBox='0 0 20 20'
             xmlns='http://www.w3.org/2000/svg'

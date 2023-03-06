@@ -3,17 +3,18 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
   ],
   theme: {
     extend: {
       colors: {
-        primary: "#242424",
-        purple: "#9178F2"
+        background: "#242424"
       }
     },
   },
   plugins: [
-    require('flowbite/plugin')
+    require('daisyui')
   ],
+  daisyui: {
+    themes: ["light", "dark"]
+  }
 }
