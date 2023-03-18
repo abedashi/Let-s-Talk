@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id            String   @default(cuid()) @id
+  email         String   @unique
+  password      String
+  first_name    String
+  last_name     String
+  display_photo String   @default("https://images.pexels.com/photos/1606655/pexels-photo-1606655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")
+  about         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  stories       Storys[]
+}
+
+model Otps {
+  id            Int      @default(autoincrement()) @id
+  email         String
+  code          String   @unique
+  createdAt     DateTime @default(now())
+}
+
+model Storys {
+  id            String   @default(cuid()) @id
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String
+  user          Users     @relation(fields: [userId], references: [id])
+  images        Images[]
+}
+
+model Images {
+  id            Int      @default(autoincrement()) @id
+  url           String   
+  content       String
+  storyId       String
+  story         Storys   @relation(fields: [storyId], references: [id])
+}
