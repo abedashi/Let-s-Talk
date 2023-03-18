@@ -1,19 +1,74 @@
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 500;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #1b1b1b;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-} */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'signika_regular';
+  src: url('/public/fonts/signika_regular.ttf');
+}
+@font-face {
+  font-family: 'signika_light';
+  src: url('../public/fonts/signika_light.ttf');
+}
+@font-face {
+  font-family: 'signika_medium';
+  src: url('../public/fonts/signika_medium.ttf');
+}
+@font-face {
+  font-family: 'signika_semibold';
+  src: url('../public/fonts/signika-_semiBold.ttf');
+}
+@font-face {
+  font-family: 'signika_bold';
+  src: url('../public/fonts/signika_bold.ttf');
+}
+
+.signika_bold {
+  font-family: 'signika_bold', sans-serif;
+}
+.signika_light {
+  font-family: 'signika_light', sans-serif;
+}
+.signika_medium {
+  font-family: 'signika_medium', sans-serif;
+}
+.signika_regular {
+  font-family: 'signika_regular', sans-serif;
+}
+.signika_semibold {
+  font-family: 'signika_semibold', sans-serif;
+}
+
+.spin-button-none::-webkit-outer-spin-button,
+.spin-button-none::-webkit-inner-spin-button {
+  appearance: none;
+}
+
+.scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.inputs {
+  @apply block px-2.5 py-5 w-full text-sm text-gray-900 bg-background border-2 rounded border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-primary;
+}
+.labels {
+  @apply absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-gray-100 rounded px-2 peer-focus:px-2 peer-focus:text-primary peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-1 border-2 border-gray-100 peer-focus:border-primary;
+}
+.otp-inputs {
+  @apply w-20 h-20 border-2 rounded bg-transparent outline-none text-center font-semibold text-2xl max-sm:text-lg spin-button-none border-gray-400 focus:border-primary focus:text-gray-700 text-gray-400 transition;
+}
+
+.loadingSpinnerContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgb(36, 36, 36);
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  z-index: 5000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
