@@ -2,7 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getStory, addStory, reset } from '../features/storys/storysSlice';
+import { getMyStorys, addStory, reset } from '../features/storys/storysSlice';
+import { TbFaceIdError } from 'react-icons/tb';
+import Carousel from './ui/Carousel';
 
 type StoryForm = {
   url: string;
@@ -11,8 +13,8 @@ type StoryForm = {
 
 const AddStory = () => {
   const dispatch = useDispatch();
-  const { storys, isSuccess, isError, message } = useSelector(
-    (store) => store.auth
+  const { images, isSuccess, isError, message } = useSelector(
+    (store) => store.storys
   );
 
   useEffect(() => {
@@ -22,9 +24,12 @@ const AddStory = () => {
       toast.success(message);
     }
 
-    dispatch(getStory());
     dispatch(reset());
-  }, [storys, isError, message, isSuccess, dispatch]);
+  }, [images, isError, message, isSuccess]);
+
+  useEffect(() => {
+    dispatch(getMyStorys());
+  }, [dispatch]);
 
   const [storyForm, setStoryForm] = useState<StoryForm>({
     url: '',
@@ -43,13 +48,14 @@ const AddStory = () => {
     }));
   };
 
-  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (url.trim().length === 0 || content.trim().length === 0)
       return toast.error('please add all fields!');
 
-    dispatch(addStory(storyForm));
+    await dispatch(addStory(storyForm));
+    dispatch(getMyStorys());
 
     setStoryForm((prevState) => {
       return {
@@ -61,10 +67,10 @@ const AddStory = () => {
   };
 
   return (
-    <div className='border flex-1'>
+    <div className=' flex-1 h-screen'>
       <form
         onSubmit={onSubmitHandler}
-        className='flex flex-col items-center justify-center border gap-5'
+        className='flex flex-col items-center justify-center gap-5 h-[50%]'
       >
         <h1 className='mt-10 signika_bold text-3xl'>Add Storys</h1>
         <input
@@ -86,7 +92,16 @@ const AddStory = () => {
         ></textarea>
         <button className='btn btn-wide bg-primary max-sm:w-[90%]'>Add</button>
       </form>
-      <h1 className='signika_bold text-3xl'>My Storys</h1>
+      <div className='h-[50%] overflow-y-scroll'>
+        <h1 className='signika_bold text-3xl text-center mb-3'>My Storys</h1>
+        {images !== null ? (
+          <Carousel images={images} />
+        ) : (
+          <div className='mt-10 flex  items-center justify-center gap-3 text-2xl'>
+            <TbFaceIdError className='w-8 h-8' /> Your list is empty!
+          </div>
+        )}
+      </div>
     </div>
   );
 };

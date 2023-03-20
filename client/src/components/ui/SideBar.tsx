@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiViewfinderCircle,
@@ -15,6 +15,8 @@ type Props = {
 
 const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
   const { user } = useSelector((store) => store.auth);
+  const { id } = useParams();
+  const newPathname = `/storys/${id}`;
 
   return (
     <div className='w-20 bg-background h-screen pt-5 pb-5 flex flex-col overflow-y-auto justify-between'>
@@ -24,7 +26,9 @@ const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
       />
       <div className='flex flex-col items-center gap-10'>
         {location.pathname === '/storys' ||
-        location.pathname === '/add-story' ? (
+        location.pathname === '/add-story' ||
+        location.pathname === '/storys/start' ||
+        location.pathname === newPathname ? (
           <NavLink
             to='/add-story'
             style={({ isActive }) => {
