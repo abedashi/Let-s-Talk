@@ -16,6 +16,8 @@ import ChatInit from './components/ChatInit';
 import Chats from './components/Chats';
 import Storys from './components/Storys';
 import AddStory from './components/AddStory';
+import StorysShow from './components/StorysShow';
+import StorysInit from './components/StorysInit';
 import PageNotFound from './pages/NotFoundPage';
 
 const App = () => {
@@ -35,7 +37,11 @@ const App = () => {
               <Route path='/chat/:id' element={<Chats />} />
             </Route>
             <Route path='/settings' element={<Settings />} />
-            <Route path='/storys' element={<Storys />} />
+            <Route path='/storys' element={<Storys />}>
+              <Route index element={<Navigate to='/storys/start' />} />
+              <Route path='/storys/start' element={<StorysInit />} />
+              <Route path='/storys/:id' element={<StorysShow />} />
+            </Route>
             <Route path='/add-story' element={<AddStory />} />
           </Route>
           <Route path='/login' element={<Login />} />
