@@ -53,7 +53,7 @@ export const story = asyncHandler(async (req: AuthReq, res: Response) => {
           },
         });
 
-        res.status(201).json({ message: 'success' });
+        res.status(201).json({ message: 'Image added to your storys' });
       } catch (error) {
         throw error;
       }
@@ -66,21 +66,102 @@ export const story = asyncHandler(async (req: AuthReq, res: Response) => {
 
 export const getStorys = asyncHandler(async (req: AuthReq, res: Response) => {
   const storys = await prisma.storys.findMany({
+    where: {
+      NOT: {
+        userId: req.user.id,
+      },
+    },
     include: {
-      images: true,
+      user: {
+        select: {
+          display_photo: true,
+        },
+      },
     },
   });
 
   res.status(200).json(storys);
 });
 
-export const getStory = asyncHandler(async (req: AuthReq, res: Response) => {
-  const story = await prisma.storys.findFirst({
+export const getMyStorys = asyncHandler(async (req: AuthReq, res: Response) => {
+  const images = await prisma.images.findMany({
     where: {
-      userId: req.user.id,
+      story: {
+        userId: req.user.id,
+      },
     },
-    include: { images: true },
+    orderBy: {
+      id: 'desc',
+    },
+    include: {
+      story: {
+        include: {
+          user: {
+            select: {
+              first_name: true,
+              last_name: true,
+            },
+          },
+        },
+      },
+    },
   });
 
-  res.status(200).json(story);
+  const transformedImages = images.map(({ id, url, content, story }) => ({
+    id,
+    url,
+    content,
+    story: {
+      user: {
+        first_name: story.user.first_name,
+        last_name: story.user.last_name,
+      },
+    },
+  }));
+
+  res.status(200).json(transformedImages);
+  // });
+
+  res.status(200).json(images);
 });
+
+export const getStoryImages = asyncHandler(
+  async (req: AuthReq, res: Response) => {
+    const images = await prisma.images.findMany({
+      where: {
+        storyId: req.params.id,
+      },
+      orderBy: {
+        // story: {
+        id: 'desc',
+        // },
+      },
+      include: {
+        story: {
+          include: {
+            user: {
+              select: {
+                first_name: true,
+                last_name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const transformedImages = images.map(({ id, url, content, story }) => ({
+      id,
+      url,
+      content,
+      story: {
+        user: {
+          first_name: story.user.first_name,
+          last_name: story.user.last_name,
+        },
+      },
+    }));
+
+    res.status(200).json(transformedImages);
+  }
+);
