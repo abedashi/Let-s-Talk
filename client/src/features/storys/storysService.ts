@@ -12,8 +12,18 @@ const getStorys = async (token: string) => {
   return data;
 };
 
-const getStory = async (token: string) => {
-  const { data } = await axios.get(API_URL + 'get-story', {
+const getMyStorys = async (token: string) => {
+  const { data } = await axios.get(API_URL + 'get-my-story', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return data;
+};
+
+const getStoryImages = async (id: string, token: string) => {
+  const { data } = await axios.get(API_URL + `get-story-images/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -38,8 +48,9 @@ const addStory = async (storyData: StoryData, token: string) => {
 };
 
 const storysService = {
+  getMyStorys,
   getStorys,
-  getStory,
+  getStoryImages,
   addStory,
 };
 

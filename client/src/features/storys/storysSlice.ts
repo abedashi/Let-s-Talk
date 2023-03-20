@@ -3,7 +3,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import storysService from './storysService';
 
 type initialStateType = {
-  storys: [];
+  storys: [] | null;
+  images: [] | null;
   isError: boolean;
   isSuccess: boolean;
   isLoading: boolean;
@@ -12,6 +13,7 @@ type initialStateType = {
 
 const initialState: initialStateType = {
   storys: [],
+  images: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -36,12 +38,30 @@ export const getStorys = createAsyncThunk(
   }
 );
 
-export const getStory = createAsyncThunk(
-  'storys/get-story',
+export const getMyStorys = createAsyncThunk(
+  'storys/get-my-storys',
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.accessToken;
-      return await storysService.getStory(token);
+      return await storysService.getMyStorys(token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getStoryImages = createAsyncThunk(
+  'storys/get-story-images',
+  async (id, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.accessToken;
+      return await storysService.getStoryImages(id, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -90,7 +110,6 @@ export const storysSlice = createSlice({
       })
       .addCase(getStorys.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
         state.storys = action.payload;
       })
       .addCase(getStorys.rejected, (state, action) => {
@@ -98,15 +117,26 @@ export const storysSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
       })
-      .addCase(getStory.pending, (state) => {
+      .addCase(getStoryImages.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getStory.fulfilled, (state, action) => {
+      .addCase(getStoryImages.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
-        state.storys = action.payload;
+        state.images = action.payload;
       })
-      .addCase(getStory.rejected, (state, action) => {
+      .addCase(getStoryImages.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getMyStorys.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getMyStorys.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.images = action.payload;
+      })
+      .addCase(getMyStorys.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -117,7 +147,7 @@ export const storysSlice = createSlice({
       .addCase(addStory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.message = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(addStory.rejected, (state, action) => {
         state.isLoading = false;
