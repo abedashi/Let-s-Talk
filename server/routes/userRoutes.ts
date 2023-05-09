@@ -6,7 +6,6 @@ import {
   signup,
   verifyOtp,
   updateUser,
-  getContacts,
   getContact,
   me,
 } from '../controllers/userControllers';
@@ -17,6 +16,4 @@ userRouter.post('/login/verify', verifyOtp);
 userRouter.post('/signup', signup);
 userRouter.post('/login', login);
 
-userRouter.get('/getContact', protect, getContact);
-userRouter.get('/getContacts', protect, getContacts);
 userRouter.get('/me', protect, me);

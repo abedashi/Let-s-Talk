@@ -257,28 +257,6 @@ export const getContact = asyncHandler(async (req: AuthReq, res: Response) => {
   res.status(200).json(contact);
 });
 
-export const getContacts = asyncHandler(async (req: AuthReq, res: Response) => {
-  const contacts = await prisma.users.findMany({
-    where: {
-      NOT: {
-        id: req.user.id,
-      },
-    },
-    select: {
-      id: true,
-      email: true,
-      first_name: true,
-      last_name: true,
-      about: true,
-      display_photo: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
-
-  res.status(200).json(contacts);
-});
-
 export const me = asyncHandler(async (req: AuthReq, res: Response) => {
   res.status(200).json(req.user);
 });
