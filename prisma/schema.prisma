@@ -21,6 +21,8 @@ model Users {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   stories       Storys[]
+  chats1         Chats[] @relation("user1")
+  chats2         Chats[] @relation("user2")
 }
 
 model Otps {
@@ -35,7 +37,7 @@ model Storys {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   userId        String
-  user          Users     @relation(fields: [userId], references: [id])
+  user          Users    @relation(fields: [userId], references: [id])
   images        Images[]
 }
 
@@ -45,4 +47,23 @@ model Images {
   content       String
   storyId       String
   story         Storys   @relation(fields: [storyId], references: [id])
+}
+
+model Chats {
+  id            String   @default(cuid()) @id
+  contact_1     String
+  contact_2     String
+  user1         Users    @relation("user1", fields: [contact_1], references: [id])
+  user2         Users    @relation("user2", fields: [contact_2], references: [id])
+  createdAt     DateTime @default(now())
+  chat_messages Chat_Message[]
+}
+
+model Chat_Message {
+  id            String  @default(cuid()) @id
+  name          String
+  message       String
+  createdAt     DateTime @default(now())
+  chat_id       String
+  chat          Chats    @relation(fields: [chat_id], references: [id])
 }
