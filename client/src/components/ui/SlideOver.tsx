@@ -4,10 +4,17 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 
 type Props = {
   isOpen: boolean;
+  profile: {
+    id: string;
+    about: string;
+    first_name: string;
+    last_name: string;
+    display_photo: string;
+  };
   closeProfile: (payload: boolean) => void;
 };
 
-const SlideOver: React.FC<Props> = ({ isOpen, closeProfile }) => {
+const SlideOver: React.FC<Props> = ({ isOpen, profile, closeProfile }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={closeProfile}>
@@ -72,23 +79,18 @@ const SlideOver: React.FC<Props> = ({ isOpen, closeProfile }) => {
                           <div className='flex flex-col items-center gap-4'>
                             <img
                               className='w-40 h-40 rounded-lg mt-2'
-                              src='https://preview.redd.it/dh5otp8kcf741.png?width=640&crop=smart&auto=webp&s=d795f12b5e3eea1ef4d7ceb8244fca98e2384dbf'
+                              src={profile && profile.display_photo}
                               alt='profile img'
                             />
-                            <div className='mb-16 font-bold text-lg'>ashie</div>
+                            <div className='mb-16 font-bold text-lg'>
+                              {profile &&
+                                profile.first_name + ' ' + profile.last_name}
+                            </div>
                           </div>
                           <div className='text-gray-500 font-semibold'>
                             <span>About:</span>
-                            <p className='pl-3'>
-                              Lorem ipsum dolor, sit amet consectetur
-                              adipisicing elit. Est, harum labore molestiae
-                              libero nobis nulla autem saepe ipsa debitis neque
-                              dolorum, consequatur dolorem similique officia
-                              sunt et natus earum sint!
-                            </p>
+                            <p className='pl-3'>{profile && profile.about}</p>
                             <br />
-                            <span>Phone no:</span>
-                            <p className='pl-3'>+961(70024607)</p>
                           </div>
                         </div>
                       </div>

@@ -1,4 +1,10 @@
-const ChatsInput = () => {
+import { Socket } from 'socket.io-client';
+
+type Props = {
+  socket: Socket;
+};
+
+const ChatsInput: React.FC<Props> = ({ socket }) => {
   return (
     <form className='flex items-center p-5'>
       <label htmlFor='chat' className='sr-only'>

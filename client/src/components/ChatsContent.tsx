@@ -1,151 +1,93 @@
-import { useRef, useEffect } from 'react';
+import moment from 'moment-timezone';
+import ScrollToBottom from 'react-scroll-to-bottom';
 
-const ChatsContent = () => {
-  const ul = useRef<HTMLUListElement>(null);
+const formattedTime = (date: string) => {
+  const newDate = moment.utc(date);
+  const formattedTime = newDate.local().format('h:mm A');
+  return formattedTime;
+};
 
-  useEffect(() => {
-    const myUl = ul.current;
-    if (myUl) {
-      myUl.scrollTop = myUl.scrollHeight;
+// const formattedTime = (date: string) => {
+//   const newDate = new Date(date);
+//   const formattedTime = newDate.toLocaleTimeString('en-US', {
+//     hour: 'numeric',
+//     minute: 'numeric',
+//     hour12: true,
+//   });
+//   return formattedTime;
+// };
+
+type message = {
+  name: string;
+  message: string;
+  createdAt: string;
+};
+
+type Props = {
+  messages: message[];
+  first_name: string;
+  last_name: string;
+};
+type MessageGroup = [date: string, messages: message[]];
+
+const ChatsContent: React.FC<Props> = ({ messages, first_name, last_name }) => {
+  // group messages by date
+  const groupedMessages = messages?.reduce((groups: any, message: message) => {
+    const date = moment(message.createdAt).format('dddd MMMM Do');
+
+    if (!groups[date]) {
+      groups[date] = [];
     }
-  }, []);
+    groups[date].push(message);
+    return groups;
+  }, {});
+
+  // console.log('groupedMessages:', groupedMessages);
+
+  const messageGroups: MessageGroup[] = groupedMessages
+    ? Object.entries(groupedMessages)
+    : [];
+
+  // console.log('messageGroups:', messageGroups);
 
   return (
-    <ul
-      ref={ul}
-      className='flex-1 bg-background p-5 overflow-y-scroll flex flex-col'
-    >
-      {/* me */}
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
+    <ScrollToBottom className='flex-1 bg-background p-5 overflow-y-scroll flex flex-col'>
+      {messageGroups.map(([date, messages]) => (
+        <div key={date}>
+          <h3 className='text-center chat-footer opacity-50'>{date}</h3>
+          <ul>
+            {messages.map((message, index) => {
+              return (
+                <li
+                  key={index}
+                  className={`chat ${
+                    message.name === first_name + ' ' + last_name
+                      ? 'chat-end'
+                      : 'chat-start'
+                  }`}
+                >
+                  <div className='chat-header'>
+                    <time className='text-xs opacity-50'>
+                      {formattedTime(message.createdAt)}
+                    </time>
+                  </div>
+                  <div
+                    className={`chat-bubble ${
+                      message.name === first_name + ' ' + last_name
+                        ? 'bg-primary'
+                        : 'bg-sec'
+                    }`}
+                  >
+                    {message.message}
+                  </div>
+                  {/* <div className='chat-footer opacity-50'>Seen</div> */}
+                </li>
+              );
+            })}
+          </ul>
         </div>
-        <div className='chat-bubble bg-primary'>I loved you.</div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-      {/* me */}
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>I loved you.</div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-
-      {/* guest */}
-      <li className='chat chat-start'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:00 am</time>
-        </div>
-        <div className='chat-bubble bg-sec'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis,
-          odit! Quas maxime, sit laboriosam exercitationem fugiat fugit. Ducimus
-          sed dolorem rerum temporibus facere modi, ratione earum, cum nostrum,
-          magnam voluptates!
-        </div>
-        {/* <div className='chat-footer opacity-50'>Seen</div> */}
-      </li>
-
-      {/* me */}
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
-          consectetur distinctio sequi modi minima magnam alias in praesentium
-          cum ipsa iste corrupti, velit officiis necessitatibus doloremque nemo.
-          Expedita, animi ex.
-        </div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>I loved you.</div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-      {/* me */}
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>I loved you.</div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-
-      {/* guest */}
-      <li className='chat chat-start'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:00 am</time>
-        </div>
-        <div className='chat-bubble bg-sec'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis,
-          odit! Quas maxime, sit laboriosam exercitationem fugiat fugit. Ducimus
-          sed dolorem rerum temporibus facere modi, ratione earum, cum nostrum,
-          magnam voluptates!
-        </div>
-        {/* <div className='chat-footer opacity-50'>Seen</div> */}
-      </li>
-
-      {/* me */}
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
-          consectetur distinctio sequi modi minima magnam alias in praesentium
-          cum ipsa iste corrupti, velit officiis necessitatibus doloremque nemo.
-          Expedita, animi ex.
-        </div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>I loved you.</div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-      {/* me */}
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>I loved you.</div>
-        <div className='chat-footer opacity-50'>Seen</div>
-      </li>
-
-      {/* guest */}
-      <li className='chat chat-start'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:00 am</time>
-        </div>
-        <div className='chat-bubble bg-sec'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis,
-          odit! Quas maxime, sit laboriosam exercitationem fugiat fugit. Ducimus
-          sed dolorem rerum temporibus facere modi, ratione earum, cum nostrum,
-          magnam voluptates!
-        </div>
-        {/* <div className='chat-footer opacity-50'>Seen</div> */}
-      </li>
-
-      {/* me */}
-      <li className='chat chat-end'>
-        <div className='chat-header'>
-          <time className='text-xs opacity-50'>2:01 am</time>
-        </div>
-        <div className='chat-bubble bg-primary'>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam
-          consectetur distinctio sequi modi minima magnam alias in praesentium
-          cum ipsa iste corrupti, velit officiis necessitatibus doloremque nemo.
-          Expedita, animi ex.
-        </div>
-        <div className='chat-footer opacity-50'>Delivered</div>
-      </li>
-    </ul>
+      ))}
+    </ScrollToBottom>
   );
 };
 

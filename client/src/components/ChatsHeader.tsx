@@ -1,18 +1,26 @@
 type Props = {
+  firstName: string;
+  lastName: string;
+  displayPhoto: string;
   openProfile: () => void;
 };
 
-const ChatHeader: React.FC<Props> = ({ openProfile }) => {
+const ChatHeader: React.FC<Props> = ({
+  firstName,
+  lastName,
+  displayPhoto,
+  openProfile,
+}) => {
   return (
     <div className='flex items-center p-5 gap-5'>
       <img
         className='w-10 h-10 rounded-full'
-        src='https://preview.redd.it/dh5otp8kcf741.png?width=640&crop=smart&auto=webp&s=d795f12b5e3eea1ef4d7ceb8244fca98e2384dbf'
+        src={displayPhoto}
         alt='Rounded avatar'
       />
       <div className='flex items-center justify-between flex-1'>
         <div>
-          <div className='text-lg'>ashie</div>
+          <div className='text-lg capitalize'>{firstName + ' ' + lastName}</div>
           <div className='text-xs text-gray-500'>offline</div>
         </div>
         <div className='cursor-pointer' onClick={openProfile}>

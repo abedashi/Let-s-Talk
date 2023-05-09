@@ -1,45 +1,173 @@
 // @ts-nocheck
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { getContacts } from '../features/contacts/contactsSlice';
+import { getChats } from '../features/chats/chatsSlice';
+import { HiOutlineUserAdd } from 'react-icons/hi';
+import { MdOutlineGroupAdd } from 'react-icons/md';
+import Modal4 from './ui/Modal4';
 
-type Contacts = {
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  display_photo: string;
-  about: string;
+type ChatMessage = {
+  name: string;
+  message: string;
   createdAt: string;
-  updatedAt: string;
 };
+
+type Chats = {
+  id: string;
+  contact_1: string;
+  contact_2: string;
+  createdAt: string;
+  user1: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    display_photo: string;
+  };
+  user2: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    display_photo: string;
+  };
+  chat_messages: ChatMessage[];
+};
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const options = {
+    day: '2-digit',
+    month: 'short',
+    year: '2-digit',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  };
+  return date.toLocaleString('en-US', options);
+}
 
 const Inbox = () => {
   const dispatch = useDispatch();
-  const { contacts, isLoading, isSuccess, isError, message } = useSelector(
-    (store) => store.contacts
-  );
+  const { user } = useSelector((store) => store.auth);
+  const { chats } = useSelector((store) => store.chats);
+
+  const sortedChats = chats
+    .slice()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   useEffect(() => {
-    dispatch(getContacts());
+    dispatch(getChats());
   }, [dispatch]);
+
+  const [isChat, setIsChat] = useState(true);
+
+  const onChatHandler = () => setIsChat(true);
+  const onGroupHandler = () => setIsChat(false);
 
   return (
     <div className='w-96 p-5 border-r border-r-background max-lg:hidden'>
-      <div className='mb-4'>
-        <input
-          type='text'
-          placeholder='Search or start new chat'
-          className='input input-bordered focus:ring-primary focus:border-primary bg-inherit w-full'
-        />
+      <div className='flex items-center w-full gap-3 mb-2'>
+        {isChat && (
+          <>
+            <label htmlFor='chat'>
+              <HiOutlineUserAdd className='w-6 h-6 cursor-pointer' />
+            </label>
+            <Modal4 modal='chat' />
+          </>
+        )}
+        <div
+          className={`grid h-10 flex-grow card bg-background ${
+            isChat && 'bg-primary'
+          } rounded-box place-items-center cursor-pointer`}
+          onClick={onChatHandler}
+        >
+          Chats
+        </div>
+
+        <div
+          className={`grid h-10 flex-grow card bg-background ${
+            !isChat && 'bg-primary'
+          } rounded-box place-items-center cursor-pointer`}
+          onClick={onGroupHandler}
+        >
+          Groups
+        </div>
+        {!isChat && (
+          <>
+            <label htmlFor='group'>
+              <MdOutlineGroupAdd className='w-6 h-6 cursor-pointer' />
+            </label>
+            <Modal4 modal='group' />
+          </>
+        )}
       </div>
+
       <div className='h-[95%] overflow-y-scroll'>
-        {contacts.map((contact: Contacts[]) => (
-          <div key={contact.id}>
+        {sortedChats.map((chat: Chats) => {
+          const otherUser =
+            chat.user1 && chat.user1.id === (user && user.id)
+              ? chat.user2
+              : chat.user1;
+          if (otherUser.id !== user && user.id) {
+            return (
+              <div key={chat.id}>
+                <NavLink
+                  to={`/chat/${chat.id}`}
+                  key={chat.id}
+                  style={({ isActive }) => {
+                    return {
+                      backgroundColor: isActive ? '#242424' : '',
+                    };
+                  }}
+                  className='flex items-center cursor-pointer p-2'
+                >
+                  <div className='avatar p-1'>
+                    <div className='w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
+                      <img src={otherUser.display_photo} />
+                    </div>
+                  </div>
+                  <div className='flex-1 px-2'>
+                    <div className='flex items-center justify-between'>
+                      <div className='font-bold text-lg capitalize'>
+                        {otherUser.first_name} {otherUser.last_name}
+                      </div>
+                      {chat &&
+                        chat.chat_messages &&
+                        chat.chat_messages.length > 0 && (
+                          <div className='text-xs text-gray-500'>
+                            {formatDate(
+                              chat.chat_messages.slice(-1)[0] &&
+                                chat.chat_messages.slice(-1)[0].createdAt
+                            )}
+                          </div>
+                        )}
+                    </div>
+                    <div className='text-gray-500'>
+                      <div className='w-64 truncate break-words'>
+                        {chat &&
+                          chat.chat_messages &&
+                          chat.chat_messages.length > 0 &&
+                          chat.chat_messages.slice(-1)[0] &&
+                          chat.chat_messages.slice(-1)[0].message}
+                      </div>
+                    </div>
+                  </div>
+                </NavLink>
+                <hr className='border-background' />
+              </div>
+            );
+          }
+          return null;
+        })}
+      </div>
+
+      {/* <div className='h-[95%] overflow-y-scroll'>
+        {chats.map((chat: Chats[]) => (
+          {chat.user1.id === user && user.id &&
+          <div key={chat.user1.id}>
             <NavLink
-              to={`/chat/${contact.id}`}
-              key={contact.id}
+              to={`/chat/${chat.id}`}
+              key={chat.id}
               style={({ isActive }) => {
                 return {
                   backgroundColor: isActive ? '#242424' : '',
@@ -49,13 +177,13 @@ const Inbox = () => {
             >
               <div className='avatar p-1'>
                 <div className='w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
-                  <img src={contact.display_photo} />
+                  <img src={chat.display_photo} />
                 </div>
               </div>
               <div className='flex-1 px-2'>
                 <div className='flex items-center justify-between'>
                   <div className='font-bold text-lg capitalize'>
-                    {contact.first_name} {contact.last_name}
+                    {chat.first_name} {chat.last_name}
                   </div>
                   <div className='text-xs text-gray-500'>3:21 pm</div>
                 </div>
@@ -63,9 +191,10 @@ const Inbox = () => {
               </div>
             </NavLink>
             <hr className='border-background' />
-          </div>
+          </div>}
         ))}
-      </div>
+      </div> */}
+
       {/* <div className='flex items-center cursor-pointer p-2 rounded border'>
         <div className='avatar p-1'>
           <div className='w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>

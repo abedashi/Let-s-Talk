@@ -21,7 +21,7 @@ const Storys = () => {
   // }
 
   return (
-    <div className='flex-1 border'>
+    <div className='flex-1'>
       {storys !== null && storys.length > 0 ? (
         storys.map((story) => (
           <div className='flex items-center bg-background border-l border-l-sec p-5 gap-5 overflow-x-scroll'>
