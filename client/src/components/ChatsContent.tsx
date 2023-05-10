@@ -18,6 +18,7 @@ const formattedTime = (date: string) => {
 // };
 
 type message = {
+  id: string;
   name: string;
   message: string;
   createdAt: string;

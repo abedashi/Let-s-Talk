@@ -1,12 +1,46 @@
+// @ts-nocheck
+import { FormEvent } from 'react';
 import { Socket } from 'socket.io-client';
+import { useDispatch } from 'react-redux';
+import { addMessage } from '../features/chats/chatsSlice';
+import Picker from '@emoji-mart/react';
+import data from '@emoji-mart/data';
 
 type Props = {
+  name: string;
+  roomId: string;
   socket: Socket;
+  message: string;
+  showPicker: boolean;
+  setShowPicker: () => void;
+  setMessage: () => void;
+  onChangeHandler: () => void;
 };
 
-const ChatsInput: React.FC<Props> = ({ socket }) => {
+const ChatsInput: React.FC<Props> = ({
+  name,
+  roomId,
+  socket,
+  message,
+  showPicker,
+  setShowPicker,
+  setMessage,
+  onChangeHandler,
+}) => {
+  const dispatch = useDispatch();
+  const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    socket.emit('message', roomId, message.trim(), name);
+    dispatch(
+      addMessage({ name, message, createdAt: new Date().toISOString() })
+    );
+    console.log(message);
+    setMessage('');
+  };
+
   return (
-    <form className='flex items-center p-5'>
+    <form onSubmit={onSubmitHandler} className='flex items-center p-5'>
       <label htmlFor='chat' className='sr-only'>
         Your message
       </label>
@@ -32,6 +66,7 @@ const ChatsInput: React.FC<Props> = ({ socket }) => {
         </button>
         <button
           type='button'
+          onClick={() => setShowPicker(!showPicker)}
           className='p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600'
         >
           <svg
@@ -53,6 +88,8 @@ const ChatsInput: React.FC<Props> = ({ socket }) => {
           type='text'
           className='bg-background border border-background text-white text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5'
           placeholder='Type message...'
+          value={message}
+          onChange={onChangeHandler}
           required
         />
         <button
@@ -71,6 +108,22 @@ const ChatsInput: React.FC<Props> = ({ socket }) => {
           <span className='sr-only'>Send message</span>
         </button>
       </div>
+      {showPicker && (
+        <>
+          <div className='backdrop' onClick={() => setShowPicker(false)} />
+          <div className='picker-container'>
+            <Picker
+              data={data}
+              previewPosition='none'
+              onEmojiSelect={(event) => {
+                setShowPicker(false);
+                const newMessage = message + event.native;
+                setMessage(newMessage);
+              }}
+            />
+          </div>
+        </>
+      )}
     </form>
   );
 };
