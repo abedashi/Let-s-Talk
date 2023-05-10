@@ -103,6 +103,21 @@ export const chatsSlice = createSlice({
       state.isError = false;
       state.message = '';
     },
+    addMessage: (state, action) => {
+      const newMessage = action.payload;
+      const existingMessage = state.room.chat_messages.find((message) => {
+        // Convert both createdAt values to the same format for comparison
+        const existingCreatedAt = new Date(message.createdAt).toISOString();
+        const newMessageCreatedAt = new Date(
+          newMessage.createdAt
+        ).toISOString();
+        return existingCreatedAt === newMessageCreatedAt;
+      });
+
+      if (!existingMessage) {
+        state.room.chat_messages.push(newMessage);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -161,5 +176,5 @@ export const chatsSlice = createSlice({
   },
 });
 
-export const { reset } = chatsSlice.actions;
+export const { reset, addMessage } = chatsSlice.actions;
 export default chatsSlice.reducer;
