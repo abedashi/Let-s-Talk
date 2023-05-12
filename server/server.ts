@@ -31,18 +31,37 @@ app.use('/api/chats', chatRouter);
 
 app.use(errorHandler);
 
+// interface OnlineUsers {
+//   [socketId: string]: string;
+// }
+
+// const onlineUsers: OnlineUsers = {}; // Store online users in a dictionary
+
+interface User {
+  roomId: string;
+  userId: string;
+}
+
+const onlineUsers: Record<string, User> = {}; // Store online users in a dictionary
+
 io.on('connection', (socket) => {
   console.log(`User ${socket.id} connected`);
 
   socket.on('join', (roomId: string, userId: string) => {
     socket.join(roomId);
-    socket.to(roomId).emit('user joined', userId);
+    onlineUsers[socket.id] = { roomId, userId };
+    io.emit('onlineUsers', Object.values(onlineUsers));
+    // onlineUsers[socket.id] = userId;
+    // io.to(roomId).emit('onlineUsers', Object.values(onlineUsers));
     console.log(userId, 'joined room Id', roomId);
   });
 
   socket.on('leave', async (roomId, userId) => {
     socket.leave(roomId);
-
+    delete onlineUsers[socket.id];
+    io.emit('onlineUsers', Object.values(onlineUsers));
+    // delete onlineUsers[socket.id];
+    // io.to(roomId).emit('onlineUsers', Object.values(onlineUsers));
     console.log(`User ${userId} left room ${roomId}.`);
   });
 
@@ -64,15 +83,34 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on(
+    'typing',
+    (data: { room: string; content: string; user: string }) => {
+      console.log(
+        `Received typing event in room ${data.room}: ${data.content} - ${data.user}`
+      );
+      io.to(data.room).emit('typing', data);
+    }
+  );
+
+  socket.on('stopTyping', (room: string) => {
+    console.log(`Received stopTyping event in room ${room}`);
+    socket.to(room).emit('stopTyping');
+  });
+
   socket.on('disconnect', () => {
     console.log(`User ${socket.id} disconnected`);
+    delete onlineUsers[socket.id];
+    io.emit('onlineUsers', Object.values(onlineUsers));
+    // delete onlineUsers[socket.id];
+    // io.emit('onlineUsers', Object.values(onlineUsers));
   });
 });
 
-function getUserIdFromSocket(socket: Socket) {
-  const [room, userId] = socket.rooms.values();
-  return userId;
-}
+// function getUserIdFromSocket(socket: Socket) {
+//   const [room, userId] = socket.rooms.values();
+//   return userId;
+// }
 
 const port = process.env.PORT || 3001;
 server.listen(port, () => console.log(`Server running on port ${port}`));
