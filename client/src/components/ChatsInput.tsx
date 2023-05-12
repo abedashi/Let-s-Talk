@@ -7,10 +7,13 @@ import Picker from '@emoji-mart/react';
 import data from '@emoji-mart/data';
 
 type Props = {
+  userId: string;
   name: string;
   roomId: string;
   socket: Socket;
   message: string;
+  isTyping: boolean;
+  userWhoTyping: string;
   showPicker: boolean;
   setShowPicker: () => void;
   setMessage: () => void;
@@ -18,11 +21,14 @@ type Props = {
 };
 
 const ChatsInput: React.FC<Props> = ({
+  userId,
   name,
   roomId,
   socket,
   message,
+  isTyping,
   showPicker,
+  userWhoTyping,
   setShowPicker,
   setMessage,
   onChangeHandler,
@@ -45,7 +51,7 @@ const ChatsInput: React.FC<Props> = ({
         Your message
       </label>
       <div className='flex items-center px-3 py-2 rounded-lg w-full'>
-        <button
+        {/* <button
           type='button'
           className='inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600'
         >
@@ -63,7 +69,7 @@ const ChatsInput: React.FC<Props> = ({
             ></path>
           </svg>
           <span className='sr-only'>Upload image</span>
-        </button>
+        </button> */}
         <button
           type='button'
           onClick={() => setShowPicker(!showPicker)}
@@ -84,14 +90,21 @@ const ChatsInput: React.FC<Props> = ({
           </svg>
           <span className='sr-only'>Add emoji</span>
         </button>
-        <input
-          type='text'
-          className='bg-background border border-background text-white text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5'
-          placeholder='Type message...'
-          value={message}
-          onChange={onChangeHandler}
-          required
-        />
+        <div className='w-full relative'>
+          <input
+            type='text'
+            className='bg-background border border-background text-white text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5'
+            placeholder='Type message...'
+            value={message}
+            onChange={onChangeHandler}
+            required
+          />
+          <span className='absolute'>
+            {isTyping && userWhoTyping && userWhoTyping !== userId && (
+              <p>typing...</p>
+            )}
+          </span>
+        </div>
         <button
           type='submit'
           className='inline-flex justify-center p-2 rounded-full cursor-pointer hover:bg-blue-100 dark:hover:bg-gray-600'
