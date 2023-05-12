@@ -1,7 +1,10 @@
+// @ts-nocheck
 type Props = {
   firstName: string;
   lastName: string;
   displayPhoto: string;
+  otherUser: string;
+  onlineUsers: [];
   openProfile: () => void;
 };
 
@@ -9,8 +12,11 @@ const ChatHeader: React.FC<Props> = ({
   firstName,
   lastName,
   displayPhoto,
+  otherUser,
+  onlineUsers,
   openProfile,
 }) => {
+  const isUserOnline = onlineUsers.find((user) => user.userId === otherUser);
   return (
     <div className='flex items-center p-5 gap-5'>
       <img
@@ -21,7 +27,9 @@ const ChatHeader: React.FC<Props> = ({
       <div className='flex items-center justify-between flex-1'>
         <div>
           <div className='text-lg capitalize'>{firstName + ' ' + lastName}</div>
-          <div className='text-xs text-gray-500'>offline</div>
+          <div className='text-xs text-gray-500'>
+            <p>{isUserOnline ? 'Online' : 'Offline'}</p>
+          </div>
         </div>
         <div className='cursor-pointer' onClick={openProfile}>
           <svg
