@@ -66,7 +66,7 @@ const Skeleton = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Skeleton;
+export default Skeleton
