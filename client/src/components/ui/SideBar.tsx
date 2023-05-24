@@ -1,22 +1,26 @@
 // @ts-nocheck
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom'
 import {
   HiOutlineChatBubbleBottomCenterText,
   HiViewfinderCircle,
-} from 'react-icons/hi2';
-import { AiOutlinePlusCircle } from 'react-icons/ai';
-import { RiLogoutCircleLine } from 'react-icons/ri';
-import { VscSettings } from 'react-icons/vsc';
-import { useSelector } from 'react-redux';
+} from 'react-icons/hi2'
+import { AiOutlinePlusCircle } from 'react-icons/ai'
+import { RiLogoutCircleLine } from 'react-icons/ri'
+import { VscSettings } from 'react-icons/vsc'
+import { useSelector } from 'react-redux'
+import { useSocketContext } from '../../pages/Dashboard'
 
 type Props = {
-  onLogouthandler: () => void;
-};
+  onLogouthandler: () => void
+}
 
 const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
-  const { user } = useSelector((store) => store.auth);
-  const { id } = useParams();
-  const newPathname = `/storys/${id}`;
+  const { user } = useSelector((store) => store.auth)
+  const { id } = useParams()
+  const newPathname = `/storys/${id}`
+  // const { onlineUsers } = useSocketContext()
+
+  // console.log(onlineUsers)
 
   return (
     <div className='w-20 bg-background h-screen pt-5 pb-5 flex flex-col overflow-y-auto justify-between'>
@@ -34,7 +38,7 @@ const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
             style={({ isActive }) => {
               return {
                 color: isActive ? '#5E20DD' : 'white',
-              };
+              }
             }}
           >
             <AiOutlinePlusCircle className='w-6 h-6 cursor-pointer' />
@@ -47,7 +51,7 @@ const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
           style={({ isActive }) => {
             return {
               color: isActive ? '#5E20DD' : 'white',
-            };
+            }
           }}
         >
           <HiOutlineChatBubbleBottomCenterText className='w-6 h-6 cursor-pointer' />
@@ -58,7 +62,7 @@ const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
           style={({ isActive }) => {
             return {
               color: isActive ? '#5E20DD' : 'white',
-            };
+            }
           }}
         >
           <HiViewfinderCircle className='w-6 h-6 cursor-pointer' />
@@ -69,7 +73,7 @@ const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
           style={({ isActive }) => {
             return {
               color: isActive ? '#5E20DD' : 'white',
-            };
+            }
           }}
         >
           <VscSettings className='w-6 h-6 cursor-pointer' />
@@ -80,15 +84,18 @@ const SideBar: React.FC<Props> = ({ onLogouthandler }) => {
           className='w-6 h-6 cursor-pointer hover:text-primary'
         />
         <NavLink to='/chat/profile'>
-          <img
-            className='w-10 h-10 rounded cursor-pointer'
-            src={user ? user.display_photo : ''}
-            alt='Default avatar'
-          />
+          <div className='indicator'>
+            <span className='indicator-item indicator-bottom flex w-3 h-3 bg-green-500 rounded-full'></span>
+            <img
+              className='w-12 h-12 rounded cursor-pointer'
+              src={user?.display_photo}
+              alt='Default avatar'
+            />
+          </div>
         </NavLink>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SideBar;
+export default SideBar

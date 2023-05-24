@@ -11,59 +11,86 @@ datasource db {
 }
 
 model Users {
-  id            String   @default(cuid()) @id
-  email         String   @unique
-  password      String
-  first_name    String
-  last_name     String
-  display_photo String   @default("https://images.pexels.com/photos/1606655/pexels-photo-1606655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")
-  about         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  stories       Storys[]
-  chats1         Chats[] @relation("user1")
-  chats2         Chats[] @relation("user2")
+  id             String           @default(cuid()) @id
+  email          String           @unique
+  password       String
+  first_name     String
+  last_name      String
+  display_photo  String           @default("https://images.pexels.com/photos/1606655/pexels-photo-1606655.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2")
+  about          String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  stories        Storys[]
+  chats1         Chats[]          @relation("user1")
+  chats2         Chats[]          @relation("user2")
+  group_member   Group_members[]  @relation("member")
 }
 
-model Otps {
-  id            Int      @default(autoincrement()) @id
-  email         String
-  code          String   @unique
-  createdAt     DateTime @default(now())
+model Otps  {
+  id             Int              @default(autoincrement()) @id
+  email          String
+  code           String           @unique
+  createdAt      DateTime         @default(now())
 }
 
 model Storys {
-  id            String   @default(cuid()) @id
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  userId        String
-  user          Users    @relation(fields: [userId], references: [id])
-  images        Images[]
+  id             String           @default(cuid()) @id
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  userId         String
+  user           Users            @relation(fields: [userId], references: [id])
+  images         Images[]
 }
 
 model Images {
-  id            Int      @default(autoincrement()) @id
-  url           String   
-  content       String
-  storyId       String
-  story         Storys   @relation(fields: [storyId], references: [id])
+  id             Int              @default(autoincrement()) @id
+  url            String   
+  content        String
+  storyId        String
+  story          Storys           @relation(fields: [storyId], references: [id])
 }
 
 model Chats {
-  id            String   @default(cuid()) @id
-  contact_1     String
-  contact_2     String
-  user1         Users    @relation("user1", fields: [contact_1], references: [id])
-  user2         Users    @relation("user2", fields: [contact_2], references: [id])
-  createdAt     DateTime @default(now())
-  chat_messages Chat_Message[]
+  id             String           @default(cuid()) @id
+  contact_1      String
+  contact_2      String
+  user1          Users            @relation("user1", fields: [contact_1], references: [id])
+  user2          Users            @relation("user2", fields: [contact_2], references: [id])
+  createdAt      DateTime         @default(now())
+  chat_messages  Chat_Message[]
 }
 
 model Chat_Message {
-  id            String  @default(cuid()) @id
-  name          String
-  message       String
-  createdAt     DateTime @default(now())
-  chat_id       String
-  chat          Chats    @relation(fields: [chat_id], references: [id])
+  id             String           @default(cuid()) @id
+  name           String
+  message        String
+  createdAt      DateTime         @default(now())
+  chat_id        String
+  chat           Chats            @relation(fields: [chat_id], references: [id])
+}
+
+model Groups {
+  id             String           @default(cuid()) @id
+  group_name     String
+  image          String
+  createdAt      DateTime         @default(now())
+  group_messages Group_messages[]
+  group_members  Group_members[]
+}
+
+model Group_members {
+  id             String           @default(cuid()) @id
+  contactId      String
+  member         Users            @relation("member", fields: [contactId], references: [id])
+  group_id       String
+  group          Groups           @relation(fields: [group_id], references: [id])
+}
+
+model Group_messages {
+  id             String           @default(cuid()) @id
+  name           String
+  message        String
+  createdAt      DateTime         @default(now())
+  group_id       String
+  group          Groups           @relation(fields: [group_id], references: [id])
 }

@@ -3,22 +3,23 @@ import {
   Routes,
   Route,
   Navigate,
-} from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Login from './pages/Login';
-import Otp from './pages/Otp';
-import Settings from './components/Settings';
-import Main from './components/Main';
-import Dashboard from './pages/Dashboard';
-import Signup from './pages/Signup';
-import ChatInit from './components/ChatInit';
-import Chats from './components/Chats';
-import Storys from './components/Storys';
-import AddStory from './components/AddStory';
-import StorysShow from './components/StorysShow';
-import StorysInit from './components/StorysInit';
-import PageNotFound from './pages/NotFoundPage';
+} from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import Login from './pages/Login'
+import Otp from './pages/Otp'
+import Settings from './components/Settings'
+import Main from './components/Main'
+import Dashboard from './pages/Dashboard'
+import Signup from './pages/Signup'
+import ChatInit from './components/ChatInit'
+import Chats from './components/chats/Chats'
+import Storys from './components/storys/Storys'
+import AddStory from './components/storys/AddStory'
+import StorysShow from './components/storys/StorysShow'
+import StorysInit from './components/storys/StorysInit'
+import PageNotFound from './pages/NotFoundPage'
+import Groups from './components/groups/Groups'
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
               />
               <Route path='/chat/profile' element={<ChatInit />} />
               <Route path='/chat/:id' element={<Chats />} />
+              <Route path='/chat/group/:id' element={<Groups />} />
             </Route>
             <Route path='/settings' element={<Settings />} />
             <Route path='/storys' element={<Storys />}>
@@ -52,7 +54,7 @@ const App = () => {
       </Router>
       <ToastContainer />
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App

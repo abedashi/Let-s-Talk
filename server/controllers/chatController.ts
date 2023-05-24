@@ -1,16 +1,16 @@
-import { Request, Response } from 'express';
-import { PrismaClient, Storys } from '@prisma/client';
-import asyncHandler from 'express-async-handler';
+import { Request, Response } from 'express'
+import { PrismaClient } from '@prisma/client'
+import asyncHandler from 'express-async-handler'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 interface AuthReq extends Request {
-  user?: any;
+  user?: any
 }
 
 export const getChats = asyncHandler(async (req: AuthReq, res: Response) => {
   try {
-    const storys = await prisma.chats.findMany({
+    const rooms = await prisma.chats.findMany({
       where: {
         OR: [{ contact_1: req.user.id }, { contact_2: req.user.id }],
       },
@@ -41,18 +41,18 @@ export const getChats = asyncHandler(async (req: AuthReq, res: Response) => {
           },
         },
       },
-    });
+    })
 
-    res.status(200).json(storys);
+    res.status(200).json(rooms)
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message })
   }
-});
+})
 
 export const getChat = asyncHandler(async (req: AuthReq, res: Response) => {
   try {
-    const { id } = req.params;
-    const storys = await prisma.chats.findFirst({
+    const { id } = req.params
+    const room = await prisma.chats.findFirst({
       where: { id },
       include: {
         user1: {
@@ -81,13 +81,13 @@ export const getChat = asyncHandler(async (req: AuthReq, res: Response) => {
           },
         },
       },
-    });
+    })
 
-    res.status(200).json(storys);
+    res.status(200).json(room)
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message })
   }
-});
+})
 
 export const getContacts = asyncHandler(async (req: AuthReq, res: Response) => {
   try {
@@ -121,21 +121,21 @@ export const getContacts = asyncHandler(async (req: AuthReq, res: Response) => {
         createdAt: true,
         updatedAt: true,
       },
-    });
+    })
 
-    res.status(200).json(contacts);
+    res.status(200).json(contacts)
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message })
   }
-});
+})
 
 export const addChatRoom = asyncHandler(async (req: AuthReq, res: Response) => {
   try {
-    const { contact } = req.body;
+    const { contact } = req.body
 
     if (!contact) {
-      res.status(400);
-      throw new Error('No user selected!s');
+      res.status(400)
+      throw new Error('No user selected!s')
     }
 
     const room = await prisma.chats.create({
@@ -163,18 +163,18 @@ export const addChatRoom = asyncHandler(async (req: AuthReq, res: Response) => {
           },
         },
       },
-    });
+    })
 
     if (room) {
-      res.status(201).json(room);
+      res.status(201).json(room)
     } else {
-      res.status(400);
-      throw new Error('Room not created!');
+      res.status(400)
+      throw new Error('Room not created!')
     }
   } catch (error: any) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ message: error.message })
   }
-});
+})
 
 // export const getContacts = asyncHandler(async (req: AuthReq, res: Response) => {
 //   const contacts = await prisma.users.findMany({
@@ -199,5 +199,5 @@ export const addChatRoom = asyncHandler(async (req: AuthReq, res: Response) => {
 // });
 
 export const me = asyncHandler(async (req: AuthReq, res: Response) => {
-  res.status(200).json(req.user);
-});
+  res.status(200).json(req.user)
+})

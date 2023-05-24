@@ -2,9 +2,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { getMyStorys, addStory, reset } from '../features/storys/storysSlice';
+import {
+  getMyStorys,
+  addStory,
+  reset,
+} from '../../features/storys/storysSlice';
 import { TbFaceIdError } from 'react-icons/tb';
-import Carousel from './ui/Carousel';
+import Carousel from '../ui/Carousel';
 
 type StoryForm = {
   url: string;

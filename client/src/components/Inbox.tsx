@@ -1,40 +1,16 @@
 // @ts-nocheck
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { getChats } from '../features/chats/chatsSlice';
-import { HiOutlineUserAdd } from 'react-icons/hi';
-import { MdOutlineGroupAdd } from 'react-icons/md';
-import Modal4 from './ui/Modal4';
-
-type ChatMessage = {
-  name: string;
-  message: string;
-  createdAt: string;
-};
-
-type Chats = {
-  id: string;
-  contact_1: string;
-  contact_2: string;
-  createdAt: string;
-  user1: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    display_photo: string;
-  };
-  user2: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    display_photo: string;
-  };
-  chat_messages: ChatMessage[];
-};
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { getChats } from '../features/chats/chatsSlice'
+import { getGroups } from '../features/groups/groupsSlice'
+import { HiOutlineUserAdd } from 'react-icons/hi'
+import { MdOutlineGroupAdd } from 'react-icons/md'
+import { Groups, Chats } from '../types/types'
+import Modal4 from './ui/Modal4'
 
 function formatDate(dateString) {
-  const date = new Date(dateString);
+  const date = new Date(dateString)
   const options = {
     day: '2-digit',
     month: 'short',
@@ -42,27 +18,40 @@ function formatDate(dateString) {
     hour: 'numeric',
     minute: 'numeric',
     hour12: true,
-  };
-  return date.toLocaleString('en-US', options);
+  }
+  return date.toLocaleString('en-US', options)
 }
 
 const Inbox = () => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.auth);
-  const { chats } = useSelector((store) => store.chats);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { user } = useSelector((store) => store.auth)
+  const { chats } = useSelector((store) => store.chats)
+  const { groups } = useSelector((store) => store.groups)
 
   const sortedChats = chats
     .slice()
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
   useEffect(() => {
-    dispatch(getChats());
-  }, [dispatch]);
+    dispatch(getChats())
+    dispatch(getGroups())
+  }, [dispatch])
 
-  const [isChat, setIsChat] = useState(true);
+  const [isChat, setIsChat] = useState(true)
 
-  const onChatHandler = () => setIsChat(true);
-  const onGroupHandler = () => setIsChat(false);
+  useEffect(() => {
+    console.log(isChat)
+  }, [isChat])
+
+  const onChatHandler = () => {
+    setIsChat(true)
+    navigate('/chat/profile')
+  }
+  const onGroupHandler = () => {
+    setIsChat(false)
+    navigate('/chat/profile')
+  }
 
   return (
     <div className='w-96 p-5 border-r border-r-background max-lg:hidden'>
@@ -103,62 +92,89 @@ const Inbox = () => {
       </div>
 
       <div className='h-[95%] overflow-y-scroll'>
-        {sortedChats.map((chat: Chats) => {
-          const otherUser =
-            chat.user1 && chat.user1.id === (user && user.id)
-              ? chat.user2
-              : chat.user1;
-          if (otherUser.id !== user && user.id) {
+        {isChat &&
+          sortedChats.map((chat: Chats) => {
+            const otherUser =
+              chat?.user1?.id === (user && user.id) ? chat.user2 : chat.user1
+            if (otherUser.id !== user && user.id) {
+              return (
+                <div key={chat.id}>
+                  <NavLink
+                    to={`/chat/${chat.id}`}
+                    key={chat.id}
+                    style={({ isActive }) => {
+                      return {
+                        backgroundColor: isActive ? '#242424' : '',
+                      }
+                    }}
+                    className='flex items-center cursor-pointer p-2'
+                  >
+                    <div className='avatar p-1'>
+                      <div className='w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
+                        <img src={otherUser.display_photo} />
+                      </div>
+                    </div>
+                    <div className='flex-1 px-2'>
+                      <div className='flex items-center justify-between'>
+                        <div className='font-bold text-lg capitalize'>
+                          {otherUser.first_name} {otherUser.last_name}
+                        </div>
+                        {chat?.chat_messages?.length > 0 && (
+                          <div className='text-xs text-gray-500'>
+                            {formatDate(
+                              chat?.chat_messages?.slice(-1)[0]?.createdAt
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className='text-gray-500'>
+                        <div className='w-64 truncate break-words'>
+                          {chat?.chat_messages?.slice(-1)[0]?.message}
+                        </div>
+                      </div>
+                    </div>
+                  </NavLink>
+                  <hr className='border-background' />
+                </div>
+              )
+            }
+            return null
+          })}
+
+        {!isChat &&
+          groups.map((group: Groups) => {
             return (
-              <div key={chat.id}>
+              <div key={group.id}>
                 <NavLink
-                  to={`/chat/${chat.id}`}
-                  key={chat.id}
+                  to={`/chat/group/${group.id}`}
+                  key={group.id}
                   style={({ isActive }) => {
                     return {
                       backgroundColor: isActive ? '#242424' : '',
-                    };
+                    }
                   }}
                   className='flex items-center cursor-pointer p-2'
                 >
                   <div className='avatar p-1'>
                     <div className='w-10 h-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2'>
-                      <img src={otherUser.display_photo} />
+                      <img src={group.image} />
                     </div>
                   </div>
                   <div className='flex-1 px-2'>
                     <div className='flex items-center justify-between'>
                       <div className='font-bold text-lg capitalize'>
-                        {otherUser.first_name} {otherUser.last_name}
+                        {group.group_name}
                       </div>
-                      {chat &&
-                        chat.chat_messages &&
-                        chat.chat_messages.length > 0 && (
-                          <div className='text-xs text-gray-500'>
-                            {formatDate(
-                              chat.chat_messages.slice(-1)[0] &&
-                                chat.chat_messages.slice(-1)[0].createdAt
-                            )}
-                          </div>
-                        )}
-                    </div>
-                    <div className='text-gray-500'>
-                      <div className='w-64 truncate break-words'>
-                        {chat &&
-                          chat.chat_messages &&
-                          chat.chat_messages.length > 0 &&
-                          chat.chat_messages.slice(-1)[0] &&
-                          chat.chat_messages.slice(-1)[0].message}
+                      <div className='text-xs text-gray-500'>
+                        {formatDate(group.createdAt)}
                       </div>
                     </div>
                   </div>
                 </NavLink>
                 <hr className='border-background' />
               </div>
-            );
-          }
-          return null;
-        })}
+            )
+          })}
       </div>
 
       {/* <div className='h-[95%] overflow-y-scroll'>
@@ -229,7 +245,7 @@ const Inbox = () => {
       </div>
       <hr className='border-background' /> */}
     </div>
-  );
-};
+  )
+}
 
-export default Inbox;
+export default Inbox

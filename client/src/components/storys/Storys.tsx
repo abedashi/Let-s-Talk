@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getStorys, reset } from '../features/storys/storysSlice';
+import { getStorys, reset } from '../../features/storys/storysSlice';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 const Storys = () => {

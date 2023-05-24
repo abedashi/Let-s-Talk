@@ -1,24 +1,24 @@
 // @ts-nocheck
-import { FormEvent } from 'react';
-import { Socket } from 'socket.io-client';
-import { useDispatch } from 'react-redux';
-import { addMessage } from '../features/chats/chatsSlice';
-import Picker from '@emoji-mart/react';
-import data from '@emoji-mart/data';
+import { FormEvent } from 'react'
+import { Socket } from 'socket.io-client'
+import { useDispatch } from 'react-redux'
+import { addMessage } from '../../features/chats/chatsSlice'
+import Picker from '@emoji-mart/react'
+import data from '@emoji-mart/data'
 
 type Props = {
-  userId: string;
-  name: string;
-  roomId: string;
-  socket: Socket;
-  message: string;
-  isTyping: boolean;
-  userWhoTyping: string;
-  showPicker: boolean;
-  setShowPicker: () => void;
-  setMessage: () => void;
-  onChangeHandler: () => void;
-};
+  userId: string
+  name: string
+  roomId: string
+  socket: Socket
+  message: string
+  isTyping: boolean
+  userWhoTyping: string
+  showPicker: boolean
+  setShowPicker: () => void
+  setMessage: () => void
+  onChangeHandler: () => void
+}
 
 const ChatsInput: React.FC<Props> = ({
   userId,
@@ -33,17 +33,22 @@ const ChatsInput: React.FC<Props> = ({
   setMessage,
   onChangeHandler,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const onSubmitHandler = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
 
-    socket.emit('message', roomId, message.trim(), name);
+    socket.emit('message', roomId, message.trim(), name)
     dispatch(
-      addMessage({ name, message, createdAt: new Date().toISOString() })
-    );
-    console.log(message);
-    setMessage('');
-  };
+      addMessage({
+        name,
+        message,
+        createdAt: new Date().toISOString(),
+        chat_id: roomId,
+      })
+    )
+    console.log(message)
+    setMessage('')
+  }
 
   return (
     <form onSubmit={onSubmitHandler} className='flex items-center p-5'>
@@ -51,25 +56,6 @@ const ChatsInput: React.FC<Props> = ({
         Your message
       </label>
       <div className='flex items-center px-3 py-2 rounded-lg w-full'>
-        {/* <button
-          type='button'
-          className='inline-flex justify-center p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600'
-        >
-          <svg
-            aria-hidden='true'
-            className='w-6 h-6'
-            fill='currentColor'
-            viewBox='0 0 20 20'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              fillRule='evenodd'
-              d='M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z'
-              clipRule='evenodd'
-            ></path>
-          </svg>
-          <span className='sr-only'>Upload image</span>
-        </button> */}
         <button
           type='button'
           onClick={() => setShowPicker(!showPicker)}
@@ -129,16 +115,16 @@ const ChatsInput: React.FC<Props> = ({
               data={data}
               previewPosition='none'
               onEmojiSelect={(event) => {
-                setShowPicker(false);
-                const newMessage = message + event.native;
-                setMessage(newMessage);
+                setShowPicker(false)
+                const newMessage = message + event.native
+                setMessage(newMessage)
               }}
             />
           </div>
         </>
       )}
     </form>
-  );
-};
+  )
+}
 
-export default ChatsInput;
+export default ChatsInput

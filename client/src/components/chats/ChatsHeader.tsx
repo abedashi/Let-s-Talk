@@ -1,10 +1,13 @@
 // @ts-nocheck
+import { useSocketContext } from '../../pages/Dashboard';
+import 'animate.css';
+// import 'animate.css/animate.min.css';
+
 type Props = {
   firstName: string;
   lastName: string;
   displayPhoto: string;
   otherUser: string;
-  onlineUsers: [];
   openProfile: () => void;
 };
 
@@ -13,9 +16,9 @@ const ChatHeader: React.FC<Props> = ({
   lastName,
   displayPhoto,
   otherUser,
-  onlineUsers,
   openProfile,
 }) => {
+  const { onlineUsers } = useSocketContext();
   const isUserOnline = onlineUsers.find((user) => user.userId === otherUser);
   return (
     <div className='flex items-center p-5 gap-5'>
@@ -28,7 +31,15 @@ const ChatHeader: React.FC<Props> = ({
         <div>
           <div className='text-lg capitalize'>{firstName + ' ' + lastName}</div>
           <div className='text-xs text-gray-500'>
-            <p>{isUserOnline ? 'Online' : 'Offline'}</p>
+            <div>
+              {isUserOnline ? (
+                <h1 className='text-green-600 animate__animated animate__lightSpeedInRight'>
+                  Online
+                </h1>
+              ) : (
+                <h1 className='animate__animated animate__bounce'>Offline</h1>
+              )}
+            </div>
           </div>
         </div>
         <div className='cursor-pointer' onClick={openProfile}>

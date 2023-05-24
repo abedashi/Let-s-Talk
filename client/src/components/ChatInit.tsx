@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux'
 
 const ChatInit = () => {
-  const { user } = useSelector((store) => store.auth);
+  const { user } = useSelector((store) => store.auth)
   return (
     <div className='hero min-h-screen bg-background flex-1'>
       <div className='hero-content text-center'>
@@ -19,7 +19,7 @@ const ChatInit = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ChatInit;
+export default ChatInit
